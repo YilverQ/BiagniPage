@@ -1,0 +1,37 @@
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+env/
+
+# Archivos de distribución y empaquetado
+.Python
+build/
+dist/
+*.egg-info/
+
+# Archivos de configuración de IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de logs
+*.log
+
+# Informes de pruebas y cobertura
+htmlcov/
+.tox/
+.coverage
+.pytest_cache/
+
+# Archivos temporales y de respaldo
+*~
+*.bak
+
+# Archivos de configuración del entorno
+.env
