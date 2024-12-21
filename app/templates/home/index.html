@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Administrador{% endblock %} - {{ g.company.name }}</title>
+    <!-- Incluir Tailwind CSS desde un CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100">
+    <!-- Mostrar mensajes flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="fixed top-0 right-0 mt-4 mr-4 z-50">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} flex items-center p-4 mb-4 text-sm text-white rounded-md 
+                        {% if category == 'success' %} bg-green-500 {% elif category == 'danger' %} bg-red-500 {% endif %}" role="alert">
+                        <span class="flex-grow">{{ message }}</span>
+                        <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.style.display='none'">
+                            &times; <!-- Icono "X" -->
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="relative">
+        <!-- Fondo de la imagen -->
+        {% set wallpaper_url = url_for('static', filename='img/profile/' + company.wallpaper) if company.wallpaper else '' %}
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ wallpaper_url }}'); height: 100px;">
+            <!-- Fondo oscuro para mejorar la visibilidad del contenido -->
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+        </div>
+        
+        <header class="relative container mx-auto px-4 py-4 text-white ">
+            <!-- Imagen de perfil y datos de la compañía -->
+            <div class="flex justify-between items-center space-x-6 px-8 py-2">
+                <!-- Contenedor de la imagen de perfil y nombre de la compañía -->
+                <div class="flex items-center space-x-6">
+                    <!-- Imagen de perfil -->
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white">
+                        {% if company.picture_profile %}
+                            <img src="{{ url_for('static', filename='img/profile/' + company.picture_profile) }}" 
+                                 class="w-full h-full object-cover">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/profile/default-profile.jpg') }}"
+                                 class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Información de la compañía -->
+                    <div class="space-y-2">
+                        <h2 class="text-3xl font-semibold text-gray-800 whitespace-nowrap bg-white rounded px-4 py-2 text-center">
+                            {{ company.name }}
+                        </h2>
+                        
+                        <!-- Enlaces a redes sociales -->
+                        <div class="flex space-x-4 mt-4">
+                            <div class="flex items-center space-x-2 bg-white rounded-full px-2 py-1 whitespace-nowrap"> <!-- Ajustado padding -->
+                                <a href="{{ company.facebook_link }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs"> <!-- Ajustado tamaño de texto -->
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span>Facebook</span>
+                                </a>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-full px-2 py-1 whitespace-nowrap"> <!-- Ajustado padding -->
+                                <a href="{{ company.instagram_link }}" target="_blank" class="text-pink-600 hover:text-pink-800 text-xs"> <!-- Ajustado tamaño de texto -->
+                                    <i class="fab fa-instagram"></i>
+                                    <span>Instagram</span>
+                                </a>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-white rounded-full px-2 py-1 whitespace-nowrap"> <!-- Ajustado padding -->
+                                <a href="{{ company.other_link }}" target="_blank" class="text-gray-600 hover:text-gray-800 text-xs"> <!-- Ajustado tamaño de texto -->
+                                    <i class="fas fa-link"></i>
+                                    <span>Enlace</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- Botón de WhatsApp -->
+                <div>
+                    {% if company.whatsapp_link %}
+                        <a href="{{ company.whatsapp_link }}" class="flex items-center space-x-1 mt-4 text-white bg-green-500 hover:bg-green-600 rounded px-6 py-3 transition duration-200">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Whatsapp</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Descripción de la compañía -->
+            <div class="grid grid-cols-1 sm:grid-cols-1 text-base text-gray-800 text-justify max-w-5xl">
+                <p class="px-4 py-2 rounded">
+                    {{ company.description }}
+                </p>
+            </div>
+            <!-- Línea de separación (hr) -->
+            <hr class="my-2 border-t-2 border-gray-300">
+        </header>
+
+        <!-- Sección de productos -->
+        <section class="container mx-auto px-4">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-3">Nuestros Productos</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Mostrar los productos -->
+                {% for product in products.items %}
+                    <div class="bg-white shadow-lg rounded-md p-4">
+                        <!-- Imagen del producto -->
+                        {% set image_url = url_for('static', filename='img/image/' + product.image) if product.image else url_for('static', filename='img/image/default-image.jpg') %}
+                        <div class="w-full h-56 bg-cover bg-center rounded mb-4" style="background-image: url('{{ image_url }}');"></div>
+                        
+                        <h3 class="text-x font-semibold text-gray-800">{{ product.name }}</h3>
+                        <p class="text-gray-500 text-sm">{{ product.brand.name }}</p>
+                        <div class="text-x font-semibold text-gray-900 mt-2">${{ product.price }}</div>
+                    </div>
+                {% else %}
+                    <p>No hay productos disponibles.</p>
+                {% endfor %}
+            </div>
+
+            <div class="mt-6 flex justify-between items-center">
+                <!-- Paginación Anterior -->
+                <div class="pagination">
+                    {% if products.has_prev %}
+                        <a href="{{ url_for('admin.preview', page=products.prev_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Anterior</a>
+                    {% endif %}
+                </div>
+
+                <!-- Información de la página actual -->
+                <span class="text-gray-600">Página {{ products.page }} de {{ products.pages }}</span>
+
+                <!-- Paginación Siguiente -->
+                <div class="pagination">
+                    {% if products.has_next %}
+                        <a href="{{ url_for('admin.preview', page=products.next_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Siguiente</a>
+                    {% endif %}
+                </div>
+            </div>
+
+
+        </section>
+    </div>
+    
+
+    <!-- Incluir Font Awesome desde un CDN -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block fileJS %}{% endblock %}
+</body>
+</html>

@@ -86,7 +86,7 @@
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <!-- Mostrar los productos -->
-            {% for product in products %}
+            {% for product in products.items %}
                 <div class="bg-white shadow-lg rounded-md p-4">
                     <!-- Imagen del producto -->
                     {% set image_url = url_for('static', filename='img/image/' + product.image) if product.image else url_for('static', filename='img/image/default-image.jpg') %}
@@ -100,6 +100,27 @@
                 <p>No hay productos disponibles.</p>
             {% endfor %}
         </div>
+
+        <div class="mt-6 flex justify-between items-center">
+            <!-- Paginación Anterior -->
+            <div class="pagination">
+                {% if products.has_prev %}
+                    <a href="{{ url_for('admin.preview', page=products.prev_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Anterior</a>
+                {% endif %}
+            </div>
+
+            <!-- Información de la página actual -->
+            <span class="text-gray-600">Página {{ products.page }} de {{ products.pages }}</span>
+
+            <!-- Paginación Siguiente -->
+            <div class="pagination">
+                {% if products.has_next %}
+                    <a href="{{ url_for('admin.preview', page=products.next_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Siguiente</a>
+                {% endif %}
+            </div>
+        </div>
+
+
     </section>
 
 </div>
