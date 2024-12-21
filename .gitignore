@@ -36,7 +36,12 @@ htmlcov/
 # Archivos de configuración del entorno
 .env
 
+# Ignorar todos los archivos dentro de las carpetas especificadas
+app/static/img/brands/*
+app/static/img/image/*
+app/static/img/profile/*
 
-app/static/img/brands/
-app/static/img/image/
-app/static/img/profile/
+# Permitir las carpetas
+!app/static/img/brands/
+!app/static/img/image/
+!app/static/img/profile/
