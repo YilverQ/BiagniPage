@@ -1,0 +1,94 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Configurar Empresa{% endblock %}
+{% block title_h1 %}Actualizar Configuración{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-2">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Actualizar Configuración</h2>
+
+        <!-- Barra de estado -->
+        <div class="mb-6 flex justify-between">
+            <div id="step1" class="step-icon cursor-pointer text-green-600" onclick="moveToSection(0)">
+                <i class="fas fa-info-circle text-xl"></i>
+                <span class="text-sm">Información Básica</span>
+            </div>
+            <div id="step2" class="step-icon cursor-pointer text-gray-400" onclick="moveToSection(1)">
+                <i class="fas fa-image text-xl"></i>
+                <span class="text-sm">Imágenes</span>
+            </div>
+            <div id="step3" class="step-icon cursor-pointer text-gray-400" onclick="moveToSection(2)">
+                <i class="fas fa-link text-xl"></i>
+                <span class="text-sm">Redes Sociales</span>
+            </div>
+        </div>
+
+        <form action="{{ url_for('admin.config') }}" method="POST" enctype="multipart/form-data">
+            <!-- Información Básica -->
+            <div id="section1" class="form-section">
+                <h3 class="text-xl font-semibold text-gray-600 mb-4">Información Básica</h3>
+                <div class="mb-4">
+                    <label for="name" class="block text-lg font-medium text-gray-600">Nombre de la Compañía</label>
+                    <input type="text" id="name" name="name" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.name }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-lg font-medium text-gray-600">Descripción</label>
+                    <textarea id="description" name="description" rows="3" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ company.description }}</textarea>
+                </div>
+            </div>
+
+            <!-- Imágenes -->
+            <div id="section2" class="form-section hidden">
+                <h3 class="text-xl font-semibold text-gray-600 mb-4">Imágenes</h3>
+                {% if company.wallpaper %}
+                    <img src="{{ url_for('static', filename='img/wallpapers/' + company.wallpaper) }}" alt="Wallpaper Actual" class="w-full mt-2">
+                {% endif %}
+                <div class="mb-4">
+                    <label for="wallpaper" class="block text-lg font-medium text-gray-600">Wallpaper</label>
+                    <input type="file" id="wallpaper" name="wallpaper" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                {% if company.picture_profile %}
+                    <img src="{{ url_for('static', filename='img/profile_pictures/' + company.picture_profile) }}" alt="Imagen de Perfil Actual" class="w-32 mt-2">
+                {% endif %}
+                <div class="mb-4">
+                    <label for="picture_profile" class="block text-lg font-medium text-gray-600">Imagen de Perfil</label>
+                    <input type="file" id="picture_profile" name="picture_profile" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Redes Sociales -->
+            <div id="section3" class="form-section hidden">
+                <h3 class="text-xl font-semibold text-gray-600 mb-4">Redes Sociales</h3>
+                <div class="mb-4">
+                    <label for="facebook_link" class="block text-lg font-medium text-gray-600">Facebook</label>
+                    <input type="url" id="facebook_link" name="facebook_link" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.facebook_link }}">
+                </div>
+                <div class="mb-4">
+                    <label for="instagram_link" class="block text-lg font-medium text-gray-600">Instagram</label>
+                    <input type="url" id="instagram_link" name="instagram_link" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.instagram_link }}">
+                </div>
+                <div class="mb-4">
+                    <label for="whatsapp_link" class="block text-lg font-medium text-gray-600">WhatsApp</label>
+                    <input type="url" id="whatsapp_link" name="whatsapp_link" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.whatsapp_link }}">
+                </div>
+                <div class="mb-4">
+                    <label for="other_link" class="block text-lg font-medium text-gray-600">Otro Enlace</label>
+                    <input type="url" id="other_link" name="other_link" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.other_link }}">
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="flex justify-between mt-6">
+                <button type="button" id="prevBtn" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-gray-400 hidden" onclick="move(-1)">Anterior</button>
+                <button type="button" id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-400" onclick="move(1)">Siguiente</button>
+            </div>
+            <!-- Botón de envío al final -->
+            <button type="submit" id="submitBtn" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-400 hidden">Actualizar Configuración</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/currentSection.js') }}"></script>
+{% endblock %}

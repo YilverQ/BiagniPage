@@ -1,0 +1,109 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block title_h1 %}Bienvenido al Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Total de Productos -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Total de Productos</h3>
+            <p class="text-4xl font-bold text-blue-600">{{ total_products }}</p>
+        </div>
+        
+        <!-- Total de Marcas -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Total de Marcas</h3>
+            <p class="text-4xl font-bold text-blue-600">{{ total_brands }}</p>
+        </div>
+
+        <!-- Total de Categorías -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Total de Categorías</h3>
+            <p class="text-4xl font-bold text-blue-600">{{ total_categories }}</p>
+        </div>
+
+        <!-- Promedio de Precio de Productos -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Promedio de Precio de Productos</h3>
+            <p class="text-4xl font-bold text-blue-600">${{ "%.2f"|format(average_product_price) }}</p>
+        </div>
+
+        <!-- Productos Disponibles -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Productos Disponibles</h3>
+            <p class="text-4xl font-bold text-green-600">{{ available_products }}</p>
+        </div>
+
+        <!-- Productos No Disponibles -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Productos No Disponibles</h3>
+            <p class="text-4xl font-bold text-red-600">{{ unavailable_products }}</p>
+        </div>
+
+        <!-- Nuevos Productos del Último Mes -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Nuevos Productos en el Último Mes</h3>
+            <p class="text-4xl font-bold text-green-600">{{ new_products_last_month }}</p>
+        </div>
+
+        <!-- Última Actualización -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-700">Última Actualización</h3>
+            <p class="text-lg text-gray-600">
+                {% if last_updated_product %}
+                    {{ last_updated_product.updated_at.strftime('%Y-%m-%d') }}
+                {% else %}
+                    No hay actualizaciones
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Gráfico de Productos por Fecha -->
+        <div class="bg-white p-6 rounded-lg shadow-md col-span-2">
+            <h3 class="text-xl font-semibold text-gray-700">Productos por Fecha</h3>
+            <canvas id="productsChart"></canvas>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block fileJS %}
+<script>
+    var ctx = document.getElementById('productsChart').getContext('2d');
+    var productsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ dates | tojson }},
+            datasets: [{
+                label: 'Productos publicados',
+                data: {{ counts | tojson }},
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Fecha'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Cantidad de Productos'
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

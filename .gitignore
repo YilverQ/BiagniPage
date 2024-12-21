@@ -35,3 +35,8 @@ htmlcov/
 
 # Archivos de configuración del entorno
 .env
+
+
+app/static/brands
+app/static/image
+app/static/profile

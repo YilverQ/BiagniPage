@@ -1,0 +1,71 @@
+{% extends "admin/layout.html" %}
+{% block title %}Categorias{% endblock %}
+{% block title_h1 %}Categorias{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <div class="flex justify-between mb-6 items-center">
+        <!-- Botón para agregar nueva categoría -->
+        <a href="{{ url_for('category.create') }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200">Agregar Nueva Categoría</a>
+        
+        <!-- Barra de búsqueda -->
+        <form method="get" action="{{ url_for('category.show') }}" class="flex items-center space-x-2">
+            <input type="text" name="search" value="{{ search }}" placeholder="Buscar categoría..." class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 w-64">
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-200">Buscar</button>
+        </form>
+    </div>
+
+    <!-- Tabla de categorías -->
+    <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+        <table class="min-w-full table-auto">
+            <thead class="bg-gray-100 text-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-left">#</th>
+                    <th class="px-6 py-3 text-left">Nombre</th>
+                    <th class="px-6 py-3 text-left">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories.items %}
+                    <tr class="border-t hover:bg-gray-50 transition duration-200">
+                        <td class="px-6 py-3">{{ loop.index }}</td>
+                        <td class="px-6 py-3">{{ category.name }}</td>
+                        <td class="px-6 py-3 flex space-x-2">
+                            <!-- Botón de edición con icono y color pastel -->
+                            <a href="{{ url_for('category.edit', id=category.id) }}" 
+                               class="px-2 py-1 bg-yellow-200 text-yellow-800 rounded-md hover:bg-yellow-300 focus:ring-2 focus:ring-yellow-100 transition duration-200">
+                               <i class="fas fa-edit"></i>
+                            </a>
+
+                            <!-- Formulario para eliminar categoría con icono y color pastel -->
+                            <form action="{{ url_for('category.delete', id=category.id) }}" method="post" style="display:inline;">
+                                <button type="submit" class="px-2 py-1 bg-red-200 text-red-800 rounded-md hover:bg-red-300 focus:ring-2 focus:ring-red-100 transition duration-200">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Paginación -->
+<div class="mt-6 flex justify-between items-center">
+    <div class="pagination">
+        {% if categories.has_prev %}
+            <a href="{{ url_for('category.show', page=categories.prev_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Anterior</a>
+        {% endif %}
+    </div>
+
+    <span class="text-gray-600">Página {{ categories.page }} de {{ categories.pages }}</span>
+
+    <div class="pagination">
+        {% if categories.has_next %}
+            <a href="{{ url_for('category.show', page=categories.next_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Siguiente</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

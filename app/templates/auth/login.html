@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Incluir Tailwind CSS desde un CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex justify-center items-center">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
+        
+        <form method="POST">
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="username" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            </div>
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+            </div>
+            <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Entrar</button>
+        </form>
+
+        <!-- Mostrar mensajes flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="fixed top-0 right-0 mt-4 mr-4 z-50">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} flex items-center p-4 mb-4 text-sm text-white rounded-md 
+                        {% if category == 'success' %} bg-green-500 {% elif category == 'danger' %} bg-red-500 {% endif %}" role="alert">
+                        <span class="flex-grow">{{ message }}</span>
+                        <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.style.display='none'">
+                            &times; <!-- Icono "X" -->
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    </div>
+    
+    <!-- Incluir el archivo JavaScript -->
+    <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
+</body>
+</html>
+

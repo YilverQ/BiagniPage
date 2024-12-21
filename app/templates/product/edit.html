@@ -1,0 +1,107 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Editar Producto{% endblock %}
+{% block title_h1 %}Actualizar Producto{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-2">
+    <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Actualizar Producto</h2>
+        
+        <!-- Barra de estado -->
+        <div class="mb-6 flex justify-between">
+            <div id="step1" class="step-icon cursor-pointer" onclick="moveToSection(0)">
+                <i class="fas fa-info-circle text-xl"></i>
+                <span class="text-sm">Información Básica</span>
+            </div>
+            <div id="step2" class="step-icon cursor-pointer" onclick="moveToSection(1)">
+                <i class="fas fa-dollar-sign text-xl"></i>
+                <span class="text-sm">Precios</span>
+            </div>
+            <div id="step3" class="step-icon cursor-pointer" onclick="moveToSection(2)">
+                <i class="fas fa-tag text-xl"></i>
+                <span class="text-sm">Marca y Categorías</span>
+            </div>
+            <div id="step4" class="step-icon cursor-pointer" onclick="moveToSection(3)">
+                <i class="fas fa-image text-xl"></i>
+                <span class="text-sm">Imágenes</span>
+            </div>
+        </div>
+
+        <form action="{{ url_for('product.edit', id=product.id) }}" method="POST" enctype="multipart/form-data">
+            <div id="section1" class="form-section">
+                <div class="mb-4">
+                    <label for="name" class="block text-lg font-medium text-gray-600">Nombre del Producto</label>
+                    <input type="text" id="name" name="name" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ product.name }}" required>
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-lg font-medium text-gray-600">Descripción del Producto</label>
+                    <textarea id="description" name="description" rows="3" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ product.description }}</textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="availability" class="inline-flex items-center">
+                        <input type="checkbox" id="availability" name="availability" class="form-checkbox" {% if product.availability %}checked{% endif %}>
+                        <span class="ml-2">Disponible</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="section2" class="form-section hidden">
+                <div class="mb-4">
+                    <label for="sale_price" class="block text-lg font-medium text-gray-600">Precio de Venta</label>
+                    <input type="number" id="sale_price" name="sale_price" step="0.01" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ product.price }}" required>
+                </div>
+            </div>
+
+            <div id="section3" class="form-section hidden">
+                <div class="mb-4">
+                    <label for="brand" class="block text-lg font-medium text-gray-600">Marca</label>
+                    <select id="brand" name="brand" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                        {% for brand in brands %}
+                            <option value="{{ brand.id }}" {% if brand.id == product.brand_id %}selected{% endif %}>{{ brand.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="categories" class="block text-lg font-medium text-gray-600">Categorías</label>
+                    <select id="categories" name="categories" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" multiple>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if category in product.categories %}selected{% endif %}>{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div id="section4" class="form-section hidden">
+                {% if product.image %}
+                    <img src="{{ url_for('static', filename='img/image/' + product.image) }}" alt="Imagen actual" class="w-32 mt-2">
+                {% endif %}
+                <div class="mb-4">
+                    <label for="picture" class="block text-lg font-medium text-gray-600">Imagen Del Producto</label>
+                    <input type="file" id="picture" name="picture" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Botones de navegación -->
+            <div class="flex justify-between mt-6">
+                <button type="button" id="prevBtn" class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-gray-400 hidden" onclick="move(-1)">Anterior</button>
+                <button type="button" id="nextBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-400" onclick="move(1)">Siguiente</button>
+            </div>
+            <!-- Botón de envío al final -->
+            <button type="submit" id="submitBtn" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-400 hidden">Actualizar Producto</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/currentSection.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var choices = new Choices('#categories', {
+            removeItemButton: true,
+            maxItemCount: 5,
+            searchEnabled: false,
+            itemSelectText: 'Presiona para seleccionar'
+        });
+    });
+</script>
+{% endblock %}
