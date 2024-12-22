@@ -45,3 +45,5 @@ app/static/img/profile/*
 !app/static/img/brands/
 !app/static/img/image/
 !app/static/img/profile/
+
+/migrations/
