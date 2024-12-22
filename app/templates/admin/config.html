@@ -6,28 +6,28 @@
 {% block content %}
 <div class="container mx-auto p-2">
     <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Actualizar Configuración</h2>
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Datos de la Página</h2>
 
         <!-- Barra de estado -->
         <div class="mb-6 flex justify-between">
-            <div id="step1" class="step-icon cursor-pointer text-green-600" onclick="moveToSection(0)">
+            <div id="step1" class="step-icon cursor-pointer text-green-600 flex items-center gap-2" onclick="moveToSection(0)">
                 <i class="fas fa-info-circle text-xl"></i>
-                <span class="text-sm">Información Básica</span>
+                <span class="text-sm hidden sm:block">Información Básica</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
-            <div id="step2" class="step-icon cursor-pointer text-gray-400" onclick="moveToSection(1)">
+            <div id="step2" class="step-icon cursor-pointer text-gray-400 flex items-center gap-2" onclick="moveToSection(1)">
                 <i class="fas fa-image text-xl"></i>
-                <span class="text-sm">Imágenes</span>
+                <span class="text-sm hidden sm:block">Imágenes</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
-            <div id="step3" class="step-icon cursor-pointer text-gray-400" onclick="moveToSection(2)">
+            <div id="step3" class="step-icon cursor-pointer text-gray-400 flex items-center gap-2" onclick="moveToSection(2)">
                 <i class="fas fa-link text-xl"></i>
-                <span class="text-sm">Redes Sociales</span>
+                <span class="text-sm hidden sm:block">Redes Sociales</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
         </div>
+
 
         <form action="{{ url_for('admin.config') }}" method="POST" enctype="multipart/form-data">
             <!-- Información Básica -->
             <div id="section1" class="form-section">
-                <h3 class="text-xl font-semibold text-gray-600 mb-4">Información Básica</h3>
                 <div class="mb-4">
                     <label for="name" class="block text-lg font-medium text-gray-600">Nombre de la Compañía</label>
                     <input type="text" id="name" name="name" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" value="{{ company.name }}" required>
@@ -40,22 +40,25 @@
 
             <!-- Imágenes -->
             <div id="section2" class="form-section hidden">
-                <h3 class="text-xl font-semibold text-gray-600 mb-4">Imágenes</h3>
-                {% if company.wallpaper %}
-                    <img src="{{ url_for('static', filename='img/wallpapers/' + company.wallpaper) }}" alt="Wallpaper Actual" class="w-full mt-2">
-                {% endif %}
                 <div class="mb-4">
                     <label for="wallpaper" class="block text-lg font-medium text-gray-600">Wallpaper</label>
-                    <input type="file" id="wallpaper" name="wallpaper" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="file" id="wallpaper" name="wallpaper" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" onchange="previewImage(event, 'wallpaperPreview', 'currentWallpaper')">
                 </div>
-
-                {% if company.picture_profile %}
-                    <img src="{{ url_for('static', filename='img/profile_pictures/' + company.picture_profile) }}" alt="Imagen de Perfil Actual" class="w-32 mt-2">
+                {% if company.wallpaper %}
+                    <img id="currentWallpaper" src="{{ url_for('static', filename='img/profile/' + company.wallpaper) }}" alt="Wallpaper Actual" class="w-40 mt-2">
                 {% endif %}
+                <!-- Vista previa de la nueva imagen -->
+                <img id="wallpaperPreview" class="w-40 mt-2 hidden" alt="Vista previa del wallpaper">
+
                 <div class="mb-4">
                     <label for="picture_profile" class="block text-lg font-medium text-gray-600">Imagen de Perfil</label>
-                    <input type="file" id="picture_profile" name="picture_profile" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="file" id="picture_profile" name="picture_profile" class="w-full mt-2 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none" onchange="previewImage(event, 'profilePreview', 'currentProfile')">
                 </div>
+                {% if company.picture_profile %}
+                    <img id="currentProfile" src="{{ url_for('static', filename='img/profile/' + company.picture_profile) }}" alt="Imagen de Perfil Actual" class="w-32 mt-2">
+                {% endif %}
+                <!-- Vista previa de la nueva imagen -->
+                <img id="profilePreview" class="w-32 mt-2 hidden" alt="Vista previa de la imagen de perfil">
             </div>
 
             <!-- Redes Sociales -->
@@ -90,5 +93,6 @@
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/currentSection.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/currentSection.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/previewImage.js') }}"></script>
 {% endblock %}

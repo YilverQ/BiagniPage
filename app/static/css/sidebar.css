@@ -1,0 +1,22 @@
+/* sidebar.css */
+/* Menú visible solo en pantallas pequeñas (menos de 2xl) */
+@media (max-width: 1599px) {
+    #sidebar {
+        position: fixed;  /* Asegura que el menú se posicione sobre el contenido */
+        inset: 0;         /* Lo posiciona desde todos los lados */
+        z-index: 40;      /* Para asegurarse de que el menú se superponga */
+        width: 100%;      /* El menú ocupa toda la pantalla */
+        height: 100%;     /* Altura completa */
+    }
+}
+
+/* Menú oculto en pantallas grandes (2xl+) */
+@media (min-width: 1600px) {
+    #sidebar {
+        display: block;
+        position: relative;  /* Esto asegura que en pantallas grandes, el menú se comporte normalmente */
+        width: auto;         /* El menú tiene su tamaño normal */
+        height: auto;        /* El menú tiene su altura normal */
+    }
+}
+

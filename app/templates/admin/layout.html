@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
+    <link rel="icon" href="{{ url_for('static', filename='img/profile/' + g.company.picture_profile) }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
 </head>
 <body class="bg-gray-100">
     <!-- Mostrar mensajes flash -->
@@ -30,7 +32,7 @@
     <!-- Todo el Contenido -->
     <div class="flex min-h-screen">
         <!-- Menú lateral con altura completa y desplazable -->
-        <div class="bg-blue-800 w-64 p-6 text-white min-h-screen overflow-y-auto">
+        <div id="sidebar" class="bg-blue-800 w-64 p-6 text-white min-h-screen overflow-y-auto hidden 2xl:block">
             <a href="{{ url_for('admin.dashboard') }}">
                 <h2 class="text-2xl font-semibold mb-8 whitespace-nowrap">{{ g.company.name }}</h2>
             </a>
@@ -86,8 +88,15 @@
             </ul>
         </div>
 
+        <!-- Botón para alternar el menú, visible solo en pantallas pequeñas -->
+        <button id="toggleSidebar" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg z-50 2xl:hidden">
+            <i class="fas fa-bars"></i>
+        </button>
+
+
+
         <!-- Contenido principal, ajustable al espacio restante -->
-        <div class="flex-1 p-8">
+        <div id="main-content" class="flex-1 p-8 overflow-x-auto">
             <!-- Header del Dashboard -->
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-semibold text-gray-800">
@@ -107,6 +116,7 @@
     <!-- Incluir Font Awesome desde un CDN -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% block fileJS %}{% endblock %}

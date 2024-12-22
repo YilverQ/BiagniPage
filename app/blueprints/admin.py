@@ -24,7 +24,7 @@ def dashboard():
     total_products = Product.query.count()  # Número total de productos
     total_brands = Brand.query.count()  # Número total de marcas
     total_categories = Category.query.count()  # Número total de categorías
-    average_product_price = db.session.query(db.func.avg(Product.price)).scalar()  # Promedio de precios de productos
+    average_product_price = db.session.query(db.func.avg(Product.price)).scalar() or 0
     available_products = Product.query.filter_by(availability=True).count()  # Productos disponibles
     unavailable_products = Product.query.filter_by(availability=False).count()  # Productos no disponibles
 
