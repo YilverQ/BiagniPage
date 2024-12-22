@@ -40,7 +40,7 @@ def show():
     return render_template('product/show.html', products=products, search=search)
 
 
-
+# Crear un producto nuevo
 @product.route('/products/new', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
@@ -91,6 +91,7 @@ def create():
 
 
 # Editar una Producto
+# Editar un Producto
 @product.route('/products/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     product = Product.query.get_or_404(id)  # Buscar el producto por su ID
@@ -114,6 +115,12 @@ def edit(id):
 
         # Si se sube una nueva imagen, guardar la nueva imagen
         if picture and allowed_file(picture.filename):
+            # Eliminar la imagen anterior si existe
+            if product.image:
+                old_image_path = os.path.join(UPLOAD_FOLDER, product.image)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)  # Eliminar la imagen anterior
+
             picture_filename = secure_filename(picture.filename)
             picture.save(os.path.join(UPLOAD_FOLDER, picture_filename))
             product.image = picture_filename  # Actualizar la imagen del producto
@@ -138,10 +145,17 @@ def edit(id):
 
 
 
+# Eliminar un Producto
 @product.route('/products/delete/<int:id>', methods=['POST'])
 def delete(id):
     # Obtener el producto por su ID
     product = Product.query.get_or_404(id)
+
+    # Eliminar la imagen del producto si existe
+    if product.image:
+        image_path = os.path.join(UPLOAD_FOLDER, product.image)
+        if os.path.exists(image_path):
+            os.remove(image_path)  # Eliminar la imagen
 
     # Eliminar las asociaciones en la tabla intermedia 'product_categories' si es necesario
     for category in product.categories:
@@ -153,3 +167,4 @@ def delete(id):
 
     flash('Producto eliminado exitosamente', 'success')
     return redirect(url_for('product.show'))
+

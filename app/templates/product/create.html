@@ -10,23 +10,24 @@
         
         <!-- Barra de estado -->
         <div class="mb-6 flex justify-between">
-            <div id="step1" class="step-icon cursor-pointer" onclick="moveToSection(0)">
+            <div id="step1" class="step-icon cursor-pointer flex items-center gap-1" onclick="moveToSection(0)">
                 <i class="fas fa-info-circle text-xl"></i>
-                <span class="text-sm">Información Básica</span>
+                <span class="text-sm hidden sm:block">Información Básica</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
-            <div id="step2" class="step-icon cursor-pointer" onclick="moveToSection(1)">
+            <div id="step2" class="step-icon cursor-pointer flex items-center gap-1" onclick="moveToSection(1)">
                 <i class="fas fa-dollar-sign text-xl"></i>
-                <span class="text-sm">Precio</span>
+                <span class="text-sm hidden sm:block">Precio</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
-            <div id="step3" class="step-icon cursor-pointer" onclick="moveToSection(2)">
+            <div id="step3" class="step-icon cursor-pointer flex items-center gap-1" onclick="moveToSection(2)">
                 <i class="fas fa-tag text-xl"></i>
-                <span class="text-sm">Marca y Categorías</span>
+                <span class="text-sm hidden sm:block">Marca y Categorías</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
-            <div id="step4" class="step-icon cursor-pointer" onclick="moveToSection(3)">
+            <div id="step4" class="step-icon cursor-pointer flex items-center gap-1" onclick="moveToSection(3)">
                 <i class="fas fa-image text-xl"></i>
-                <span class="text-sm">Imágen</span>
+                <span class="text-sm hidden sm:block">Imágen</span> <!-- Solo visible en pantallas medianas en adelante -->
             </div>
         </div>
+
 
 
         <form method="POST" enctype="multipart/form-data">

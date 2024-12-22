@@ -56,7 +56,7 @@ def dashboard():
     )
 
 
-
+#Configuración de la Compañía
 @admin.route('/config', methods=['GET', 'POST'])
 def config():
     company = Company.query.first()
@@ -71,17 +71,34 @@ def config():
         company.other_link = request.form['other_link']
 
         # Manejar la actualización de imágenes
+
+        # Para la imagen de wallpaper
         if 'wallpaper' in request.files:
             wallpaper = request.files['wallpaper']
             if wallpaper and allowed_file(wallpaper.filename):
+                # Eliminar la imagen anterior si existe
+                if company.wallpaper:
+                    old_wallpaper_path = os.path.join(UPLOAD_FOLDER, company.wallpaper)
+                    if os.path.exists(old_wallpaper_path):
+                        os.remove(old_wallpaper_path)  # Eliminar la imagen anterior
+
+                # Guardar la nueva imagen
                 filename = secure_filename(wallpaper.filename)
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 wallpaper.save(filepath)
                 company.wallpaper = filename
 
+        # Para la imagen de picture_profile
         if 'picture_profile' in request.files:
             picture_profile = request.files['picture_profile']
             if picture_profile and allowed_file(picture_profile.filename):
+                # Eliminar la imagen anterior si existe
+                if company.picture_profile:
+                    old_picture_path = os.path.join(UPLOAD_FOLDER, company.picture_profile)
+                    if os.path.exists(old_picture_path):
+                        os.remove(old_picture_path)  # Eliminar la imagen anterior
+
+                # Guardar la nueva imagen
                 filename = secure_filename(picture_profile.filename)
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 picture_profile.save(filepath)
@@ -93,6 +110,7 @@ def config():
         return redirect(url_for('admin.config'))
 
     return render_template('admin/config.html', company=company)
+
 
 
 #Vemos un preview de como queda la tienda

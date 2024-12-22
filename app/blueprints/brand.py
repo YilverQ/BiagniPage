@@ -4,7 +4,6 @@ from app import db
 import os
 from werkzeug.utils import secure_filename
 
-
 brand = Blueprint('brand', __name__)
 UPLOAD_FOLDER = 'app/static/img/brands'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -84,9 +83,14 @@ def edit(id):
             flash('Ya existe una marca con ese nombre. Por favor, elige otro.', 'danger')
             return redirect(url_for('brand.edit', id=brand.id))
 
-        # Si se proporciona una nueva imagen, guardarla
+        # Si se proporciona una nueva imagen, eliminar la antigua y guardar la nueva
         picture = request.files.get('picture')
         if picture and allowed_file(picture.filename):
+            if brand.picture:
+                old_image_path = os.path.join(UPLOAD_FOLDER, brand.picture)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)  # Eliminar la imagen antigua
+
             filename = secure_filename(picture.filename)
             picture.save(os.path.join(UPLOAD_FOLDER, filename))
             brand.picture = filename  # Actualizar el campo de imagen
@@ -105,6 +109,12 @@ def edit(id):
 @brand.route('/brands/delete/<int:id>', methods=['POST'])
 def delete(id):
     brand = Brand.query.get_or_404(id)
+    
+    # Eliminar la imagen de la marca del servidor
+    if brand.picture:
+        image_path = os.path.join(UPLOAD_FOLDER, brand.picture)
+        if os.path.exists(image_path):
+            os.remove(image_path)
     
     # Eliminar los productos asociados a la marca
     products = Product.query.filter_by(brand_id=brand.id).all()
