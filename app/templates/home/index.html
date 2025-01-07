@@ -131,7 +131,7 @@
                             {% if product.price % 1 == 0 %}
                                 ${{ "%.0f"|format(product.price) }}
                             {% else %}
-                                ${{ "%.1f"|format(product.price) }}
+                                ${{ product.price }}
                             {% endif %}
                         </div>
                     </div>
@@ -139,12 +139,12 @@
                     <p>No hay productos disponibles.</p>
                 {% endfor %}
             </div>
-
+            
             <div class="mt-6 flex justify-between items-center">
                 <!-- Paginación Anterior -->
                 <div class="pagination">
                     {% if products.has_prev %}
-                        <a href="{{ url_for('admin.preview', page=products.prev_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Anterior</a>
+                        <a href="{{ url_for('home.market', page=products.prev_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Anterior</a>
                     {% endif %}
                 </div>
 
@@ -154,7 +154,7 @@
                 <!-- Paginación Siguiente -->
                 <div class="pagination">
                     {% if products.has_next %}
-                        <a href="{{ url_for('admin.preview', page=products.next_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Siguiente</a>
+                        <a href="{{ url_for('home.market', page=products.next_num, search=search) }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200 transition duration-200">Siguiente</a>
                     {% endif %}
                 </div>
             </div>
